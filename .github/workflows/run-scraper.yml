@@ -1,0 +1,37 @@
+name: Run Headless Playwright Scraper
+
+on:
+  schedule:
+    # Runs at 06:00 AM UTC every day
+    - cron: '0 6 * * *'
+  # Allows manual triggers from the GitHub UI
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install playwright gspread
+
+      - name: Install Playwright browsers and OS dependencies
+        run: |
+          python -m playwright install chromium --with-deps
+
+      - name: Run Playwright Script
+        env:
+          ACCOUNT_USERNAME: ${{ secrets.BLACKPUG_USERNAME }}
+          ACCOUNT_PASSWORD: ${{ secrets.BLACKPUG_PASSWORD }}
+        run: |
+          python scraper.py
