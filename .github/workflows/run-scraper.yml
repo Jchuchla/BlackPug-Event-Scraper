@@ -13,10 +13,10 @@ jobs:
 
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.11'
 
@@ -36,3 +36,9 @@ jobs:
           BLACKPUG_EVENTID: ${{ vars.BLACKPUG_EVENTID }}
         run: |
           python BlackPug_Download.py
+
+        name: Upload Downloaded CSV as Workflow Artifact
+        uses: actions/upload-artifact@v5
+        with:
+          name: blackpug-event-data
+          path: "*.csv" # Uploads any CSV file generated during the run

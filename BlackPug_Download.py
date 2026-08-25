@@ -43,6 +43,44 @@ def run():
         
         print("Successfully reached reporting page! Current URL:", page.url)
 
+        # 1. Trigger the popup (via click or JS evaluation)
+        page.evaluate(
+            f"getSelectedReportParam('BSA456', 698, 'Event_Operations', 'Event+Data+Dump', '{event_id}', ' ', 1);"
+        )
+
+        # 2. Wait for the modal/popup element to appear on screen
+        # Replace '.modal' or '#reportModal' with the actual container class/ID if known
+        page.wait_for_selector(".modal-content, .ui-dialog", state="visible")
+
+        # 3. Intersect with optional fields/radio buttons inside the popup (Examples):
+        # If there's a file format dropdown or radio button (e.g., selecting CSV):
+        # Selects options by visible text
+        page.select_option(
+            "#SES_REGISTRANT_ID_MULTI",
+            label=[
+                "Brotherhood Candidate",
+                "New Member Induction Experiencer",
+                "Non-Takhone Member - Adult",
+                "Non-Takhone Member - Youth",
+                "Paddle Pass Member",
+                "Takhone OA Member"
+            ]
+        )
+        page.check("#FLAG1_ON_OFFEvent_Operations")
+        page.check("#FLAG3_ON_OFFEvent_Operations")
+
+        # 4. Listen for the download event when clicking the modal's final submit/export button
+        with page.expect_download() as download_info:
+            # Target the modal submit button by text (e.g., 'Run Report', 'Export', 'Download', 'OK')
+            page.click("button:has-text('Preview Report'), input[type='submit'][value='Preview Report']")
+
+        download = download_info.value
+
+        # 5. Save the resulting file locally inside the runner
+        download_path = f"event_{event_id}_dump.csv"
+        download.save_as(download_path)
+        print(f"File successfully saved to: {download_path}")
+
         browser.close()
 
 if __name__ == "__main__":
