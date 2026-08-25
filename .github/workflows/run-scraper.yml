@@ -35,4 +35,4 @@ jobs:
           BLACKPUG_PASSWORD: ${{ secrets.BLACKPUG_PASSWORD }}
           BLACKPUG_EVENTID: ${{ vars.BLACKPUG_EVENTID }}
         run: |
-          BlackPug_Download.py
+          python BlackPug_Download.py
