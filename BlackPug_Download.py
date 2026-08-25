@@ -27,7 +27,7 @@ def run():
         page.fill('input[name="password247Scouting"]', password)
 
         # Click submit and wait for navigation
-        page.click('button[type="submit"]')
+        page.click('input[type="submit"]')
         page.wait_for_load_state("networkidle")
 
         print("Successfully logged in! Current URL:", page.url)
