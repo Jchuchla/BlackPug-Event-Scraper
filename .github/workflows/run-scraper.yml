@@ -31,7 +31,8 @@ jobs:
 
       - name: Run Playwright Script
         env:
-          ACCOUNT_USERNAME: ${{ secrets.BLACKPUG_USERNAME }}
-          ACCOUNT_PASSWORD: ${{ secrets.BLACKPUG_PASSWORD }}
+          BLACKPUG_USERNAME: ${{ secrets.BLACKPUG_USERNAME }}
+          BLACKPUG_PASSWORD: ${{ secrets.BLACKPUG_PASSWORD }}
+          BLACKPUG_EVENTID: ${{ variables.BLACKPUG_EVENTID }}
         run: |
-          python scraper.py
+          BlackPug_Download.py
