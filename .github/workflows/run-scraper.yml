@@ -33,6 +33,6 @@ jobs:
         env:
           BLACKPUG_USERNAME: ${{ secrets.BLACKPUG_USERNAME }}
           BLACKPUG_PASSWORD: ${{ secrets.BLACKPUG_PASSWORD }}
-          BLACKPUG_EVENTID: ${{ variables.BLACKPUG_EVENTID }}
+          BLACKPUG_EVENTID: ${{ vars.BLACKPUG_EVENTID }}
         run: |
           BlackPug_Download.py
