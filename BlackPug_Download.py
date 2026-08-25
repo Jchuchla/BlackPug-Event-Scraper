@@ -59,7 +59,7 @@ def run():
             "#SES_REGISTRANT_ID_MULTI",
             label=[
                 "Brotherhood Candidate",
-                "New Member Induction Experiencer",
+                "New Member Induction Experience",
                 "Non-Takhone Member - Adult",
                 "Non-Takhone Member - Youth",
                 "Paddle Pass Member",
