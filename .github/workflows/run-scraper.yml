@@ -37,8 +37,8 @@ jobs:
         run: |
           python BlackPug_Download.py
 
-      - name: Upload Downloaded CSV as Workflow Artifact
-        uses: actions/upload-artifact@v5
-        with:
-          name: blackpug-event-data
-          path: "*.csv" # Uploads any CSV file generated during the run
+      - #name: Upload Downloaded CSV as Workflow Artifact
+        #uses: actions/upload-artifact@v5
+        #with:
+          #name: blackpug-event-data
+          #path: "*.csv" # Uploads any CSV file generated during the run
