@@ -3,7 +3,7 @@ name: Run Headless Playwright Scraper
 on:
   schedule:
     # Runs at 06:00 AM UTC every day
-    - cron: '0 6 * * *'
+    - cron: '0 0,6,12,18 * * *'
   # Allows manual triggers from the GitHub UI
   workflow_dispatch:
 
@@ -12,6 +12,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Check Expiration Date
+        run: |
+          # Set your target end date (YYYY-MM-DD)
+          END_DATE="2026-09-11"
+          CURRENT_DATE=$(date -u +%Y-%m-%d)
+          
+          if [ "$CURRENT_DATE" \> "$END_DATE" ]; then
+            echo "Current date ($CURRENT_DATE) is past the end date ($END_DATE). Exiting workflow."
+            exit 0
+          fi
+      
       - name: Check out repository code
         uses: actions/checkout@v5
 
@@ -39,9 +50,3 @@ jobs:
           GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
         run: |
           python BlackPug_Download.py
-
-      #- name: Upload Downloaded CSV as Workflow Artifact
-        #uses: actions/upload-artifact@v5
-        #with:
-          #name: blackpug-event-data
-          #path: "*.csv" # Uploads any CSV file generated during the run

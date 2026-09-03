@@ -97,7 +97,7 @@ def transform_blackpug_csv(input_file: str, output_file: str):
             return "Ordeal New Member"
         elif reg_type == "Brotherhood Candidate":
             return "Brotherhood Candidate"
-        elif reg_type in ["Paddle Pass", "Takhone OA Member"]:
+        elif reg_type in ["Paddle Pass Member", "Takhone OA Member"]:
             if brotherhood_plan == "Yes":
                 return "Brotherhood Candidate"
             elif induction_crew == "Yes":
