@@ -33,8 +33,10 @@ jobs:
           BLACKPUG_USERNAME: ${{ secrets.BLACKPUG_USERNAME }}
           BLACKPUG_PASSWORD: ${{ secrets.BLACKPUG_PASSWORD }}
           BLACKPUG_EVENTID: ${{ vars.BLACKPUG_EVENTID }}
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
+          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
+          GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          GDRIVE_REFRESH_TOKEN: ${{ secrets.GDRIVE_REFRESH_TOKEN }}
         run: |
           python BlackPug_Download.py
 

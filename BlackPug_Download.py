@@ -8,19 +8,29 @@ from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from playwright.sync_api import sync_playwright
 
-
 def upload_to_drive(local_file_path: str, drive_folder_id: str):
-    """Uploads a local file directly into a specific Google Drive folder."""
-    sa_key_json = os.environ.get("GCP_SA_KEY")
-    if not sa_key_json:
-        print("Error: Missing GCP_SA_KEY environment variable.")
+    """Uploads file using real user OAuth credentials to bypass service account quota limits."""
+    client_id = os.environ.get("GDRIVE_CLIENT_ID")
+    client_secret = os.environ.get("GDRIVE_CLIENT_SECRET")
+    refresh_token = os.environ.get("GDRIVE_REFRESH_TOKEN")
+
+    if not client_id or not client_secret or not refresh_token:
+        print("Error: Missing OAuth credentials in environment variables.")
         sys.exit(1)
 
-    # Load Service Account credentials from JSON string
-    service_account_info = json.loads(sa_key_json)
-    scopes = ["https://www.googleapis.com/auth/drive.file"]
-    creds = Credentials.from_service_account_info(service_account_info, scopes=scopes)
-    service = build("drive", "v3", credentials=creds)
+    # Reconstruct credentials from refresh token
+    creds = Credentials(
+        token=None,
+        refresh_token=refresh_token,
+        token_uri="https://oauth2.googleapis.com/token",
+        client_id=client_id,
+        client_secret=client_secret,
+        scopes=["https://www.googleapis.com/auth/drive.file"]
+    )
+
+    # Refresh token if expired
+    if creds.expired or not creds.valid:
+        creds.refresh(Request())
 
     file_name = os.path.basename(local_file_path)
 
