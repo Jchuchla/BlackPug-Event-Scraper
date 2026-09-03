@@ -3,7 +3,8 @@ import os
 import sys
 import numpy as np
 import pandas as pd
-from google.oauth2.service_account import Credentials
+from google.oauth2.credentials import Credentials  # Corrected import
+from google.auth.transport.requests import Request  # Added missing Request import
 from googleapiclient.discovery import build
 from googleapiclient.http import MediaFileUpload
 from playwright.sync_api import sync_playwright
@@ -18,7 +19,7 @@ def upload_to_drive(local_file_path: str, drive_folder_id: str):
         print("Error: Missing OAuth credentials in environment variables.")
         sys.exit(1)
 
-    # Reconstruct credentials from refresh token
+    # Reconstruct user OAuth credentials from refresh token
     creds = Credentials(
         token=None,
         refresh_token=refresh_token,
@@ -32,11 +33,14 @@ def upload_to_drive(local_file_path: str, drive_folder_id: str):
     if creds.expired or not creds.valid:
         creds.refresh(Request())
 
+    # Build the Drive API service instance
+    service = build("drive", "v3", credentials=creds)
+
     file_name = os.path.basename(local_file_path)
 
     file_metadata = {
         "name": file_name,
-        "parents": [drive_folder_id]  # Targets the specific Drive folder ID
+        "parents": [drive_folder_id]
     }
 
     media = MediaFileUpload(local_file_path, mimetype="text/csv")
